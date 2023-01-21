@@ -1,5 +1,5 @@
 import latestNewsScraper from "./webscraper";
-import { prisma } from "./dbStrategy/dbHandler";
+import { prisma } from "../dbStrategy/dbHandler";
 
 export default async function saveNews() {
   const savedNews = await prisma.news.findMany({
@@ -15,6 +15,8 @@ export default async function saveNews() {
   });
 
   const latestNews = await latestNewsScraper();
+
+  console.log(savedNews);
 
   if (savedNews.length === 0) {
     await prisma.news.create({ data: latestNews });

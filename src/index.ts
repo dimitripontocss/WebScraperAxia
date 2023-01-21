@@ -1,7 +1,8 @@
 import WebSocket from "ws";
 import http from "http";
 import app from "./app";
-import saveNews from "./handler";
+import saveNews from "./scraper&DbLogic/handler";
+import { getLatestNews } from "./scraper&DbLogic/getNews";
 
 const PORT = process.env.PORT || 5000;
 
@@ -13,15 +14,11 @@ const wss = new WebSocket.Server({ server });
 
 wss.on("connection", (ws) => {
   console.log("Conectou");
-  ws.send("hi there, I am a WebSocket server");
 
-  setInterval(() => {
-    ws.send("Teste");
+  setInterval(async () => {
+    const latestNews = await getLatestNews();
+    ws.send(JSON.stringify(latestNews));
   }, 5000);
-
-  ws.on("message", (message) => {
-    console.log(`Received message => ${message}`);
-  });
 });
 
 server.listen(PORT, () => {
