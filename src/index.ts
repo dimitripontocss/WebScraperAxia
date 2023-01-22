@@ -6,7 +6,7 @@ import getLatestNews from "./scraper&DbLogic/getNews";
 
 const PORT = process.env.PORT || 5000;
 
-const MINUTE = 60000;
+const TIME = 45000;
 
 const server = http.createServer(app);
 
@@ -23,5 +23,5 @@ wss.on("connection", (ws) => {
 
 server.listen(PORT, () => {
   console.log(`Listening on http://localhost:${PORT}`);
-  setInterval(() => saveNews(), MINUTE);
+  setInterval(() => saveNews(), TIME);
 });

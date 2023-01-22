@@ -1,6 +1,12 @@
 import latestNewsScraper from "./webscraper";
 import { prisma } from "../dbStrategy/dbHandler";
 
+interface INews {
+  title: string;
+  url: string;
+  date: string | null;
+}
+
 export default async function saveNews() {
   const savedNews = await prisma.news.findMany({
     select: {
@@ -14,13 +20,20 @@ export default async function saveNews() {
     },
   });
 
-  const latestNews = await latestNewsScraper();
+  const latestsNews = await latestNewsScraper();
 
-  if (savedNews.length === 0) {
-    await prisma.news.create({ data: latestNews });
-    return;
-  }
-  if (savedNews[0].title !== latestNews.title) {
-    await prisma.news.create({ data: latestNews });
+  if (savedNews.length !== 0) {
+    let newNews: INews[] = [];
+    let cont = 0;
+
+    while (latestsNews[cont].title !== savedNews[0].title) {
+      newNews.push(latestsNews[cont]);
+      cont++;
+    }
+    newNews.reverse();
+    await prisma.news.createMany({ data: newNews });
+  } else {
+    latestsNews.reverse();
+    await prisma.news.createMany({ data: latestsNews });
   }
 }
