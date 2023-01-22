@@ -16,8 +16,6 @@ export default async function saveNews() {
 
   const latestNews = await latestNewsScraper();
 
-  console.log(savedNews);
-
   if (savedNews.length === 0) {
     await prisma.news.create({ data: latestNews });
     return;

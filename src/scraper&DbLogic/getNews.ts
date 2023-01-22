@@ -1,6 +1,6 @@
 import { prisma } from "../dbStrategy/dbHandler";
 
-export async function getLatestNews() {
+export default async function getLatestNews() {
   return await prisma.news.findMany({
     select: {
       id: true,
