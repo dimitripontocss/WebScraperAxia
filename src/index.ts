@@ -6,7 +6,7 @@ import getLatestNews from "./scraper&DbLogic/getNews";
 
 const PORT = process.env.PORT || 5000;
 
-const TIME = 45000;
+const TIME = 30000;
 
 const server = http.createServer(app);
 
